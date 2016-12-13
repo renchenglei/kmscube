@@ -58,6 +58,7 @@ static struct {
 	PFNEGLCREATESYNCKHRPROC eglCreateSyncKHR;
 	PFNEGLDESTROYSYNCKHRPROC eglDestroySyncKHR;
 	PFNEGLWAITSYNCKHRPROC eglWaitSyncKHR;
+	PFNEGLWAITSYNCKHRPROC eglClientWaitSyncKHR;
 	PFNEGLDUPNATIVEFENCEFDANDROIDPROC eglDupNativeFenceFDANDROID;
 } gl;
 
@@ -563,6 +564,7 @@ static int init_gl(void)
 	get_proc(eglCreateSyncKHR);
 	get_proc(eglDestroySyncKHR);
 	get_proc(eglWaitSyncKHR);
+	get_proc(eglClientWaitSyncKHR);
 	get_proc(eglDupNativeFenceFDANDROID);
 
 	printf("Using display %p with EGL version %d.%d\n",
@@ -1031,7 +1033,8 @@ int main(int argc, char *argv[])
 			 * the previous pageflip completes so we don't render into
 			 * the buffer that is still on screen.
 			 */
-			gl.eglWaitSyncKHR(gl.display, kms_fence, 0);
+			/* gl.eglWaitSyncKHR(gl.display, kms_fence, 0); */
+			gl.eglClientWaitSyncKHR(gl.display, kms_fence, 0);
 			gl.eglDestroySyncKHR(gl.display, kms_fence);
 		}
 
